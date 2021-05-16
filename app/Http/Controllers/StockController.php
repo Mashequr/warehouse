@@ -151,10 +151,19 @@ class StockController extends Controller
 
     public function confirmdischarge(Request $request)
     {
-        //dd($request->input());
-        DB::table('invoices')->where('stockid', $request->stockid)->update(['latefee'=>$request->latefee]);
-        DB::table('stocks')->where('stockid', $request->stockid)->update(['discharge_date'=>$request->discharge_date,'status'=>'Discharged']);
-        return redirect(route('admin_dischargedstocks'))->with('success','Stock Discharged Successfully');
+
+        try{
+            //dd($request->input());
+            DB::table('invoices')->where('stockid', $request->stockid)->update(['latefee'=>$request->latefee]);
+            DB::table('stocks')->where('stockid', $request->stockid)->update(['discharge_date'=>$request->discharge_date,'status'=>'Discharged']);
+            // return redirect(route('admin_viewstocks'))->with('success', 'Stock Deleted Successfully');
+
+            return redirect(route('admin_dischargedstocks'))->with('success','Stock Discharged Successfully');
+        }
+        catch(Exception $e)
+        {
+            return redirect(route('admin_viewstocks'))->with('failed', 'Operation Error !!!');
+        }
 
     }
 

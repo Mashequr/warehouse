@@ -24,6 +24,7 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
+
 Route::get('/home', 'BasicController@index')->name('admin_dashboard');
 
 Route::get('/category/add','CategoryController@addcategory')->name('admin_addcategory');
