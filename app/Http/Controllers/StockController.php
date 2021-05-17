@@ -156,6 +156,12 @@ class StockController extends Controller
             //dd($request->input());
             DB::table('invoices')->where('stockid', $request->stockid)->update(['latefee'=>$request->latefee]);
             DB::table('stocks')->where('stockid', $request->stockid)->update(['discharge_date'=>$request->discharge_date,'status'=>'Discharged']);
+<<<<<<< HEAD
+=======
+
+            //DB::table('stocks')->where('stockid', $request->stockid)->delete();
+            //DB::table('invoices')->where('stockid', $request->stockid)->delete();
+>>>>>>> 02116d1b5d7496866504006494911ea8b733644f
             // return redirect(route('admin_viewstocks'))->with('success', 'Stock Deleted Successfully');
 
             return redirect(route('admin_dischargedstocks'))->with('success','Stock Discharged Successfully');
