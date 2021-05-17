@@ -28,7 +28,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $response = $this->call('GET','/stock/add');
+        $response = $this->call('GET', '/stock/add');
 
         $response->assertOk();
     }
@@ -37,7 +37,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $this->call('POST','/stock/save',[
+        $this->call('POST', '/stock/save', [
             'stockid' => 'ST20212224ITM420455',
             'category' => 'Electronics',
             'description' => 'Nokia 3310',
@@ -49,7 +49,7 @@ class StockTest extends TestCase
             'stockuntil' => '2021-05-14'
         ]);
 
-        $this->assertDatabaseHas('stocks',[
+        $this->assertDatabaseHas('stocks', [
             'stockid' => 'ST20212224ITM420455'
         ]);
     }
@@ -58,7 +58,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $this->call('POST','/stock/save',[
+        $this->call('POST', '/stock/save', [
             'stockid' => 'ST20212224ITM420455',
             'category' => 'Electronics',
             'description' => 'Nokia 3310',
@@ -70,7 +70,7 @@ class StockTest extends TestCase
             'stockuntil' => '2021-05-14'
         ]);
 
-        $response = $this->call('GET','/stock/confirm/ST20212224ITM420455');
+        $response = $this->call('GET', '/stock/confirm/ST20212224ITM420455');
 
         $response->assertOk();
     }
@@ -79,7 +79,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $response = $this->call('POST','/stock/confirm/invoice',[
+        $response = $this->call('POST', '/stock/confirm/invoice', [
             'stockid' => 'ST20212224ITM420455',
             'total' => '1500',
             'paid' => '1000',
@@ -94,7 +94,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $response = $this->call('GET','/stock/viewstocks');
+        $response = $this->call('GET', '/stock/viewstocks');
 
         $response->assertOk();
     }
@@ -103,7 +103,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $this->call('POST','/stock/save',[
+        $this->call('POST', '/stock/save', [
             'stockid' => 'ST20212224ITM420455',
             'category' => 'Electronics',
             'description' => 'Nokia 3310',
@@ -115,7 +115,7 @@ class StockTest extends TestCase
             'stockuntil' => '2021-05-14'
         ]);
 
-        $this->call('POST','/stock/confirm/invoice',[
+        $this->call('POST', '/stock/confirm/invoice', [
             'stockid' => 'ST20212224ITM420455',
             'total' => '1500',
             'paid' => '1000',
@@ -123,25 +123,24 @@ class StockTest extends TestCase
             'paymethod' => 'Bkash'
         ]);
 
-        $this->call('POST','/stock/deletestocks',[
+        $this->call('POST', '/stock/deletestocks', [
             'stockid' => 'ST20212224ITM420455'
         ]);
 
-        $this->assertDatabaseMissing('stocks',[
+        $this->assertDatabaseMissing('stocks', [
             'stockid' => 'ST20212224ITM420455'
         ]);
 
-        $this->assertDatabaseMissing('invoices',[
+        $this->assertDatabaseMissing('invoices', [
             'stockid' => 'ST20212224ITM420455'
         ]);
-
     }
 
     public function testViewInvoice()
     {
         $this->userLogin();
 
-        $this->call('POST','/client/save',[
+        $this->call('POST', '/client/save', [
             'clientid' => '10',
             'clientname' => 'TestClient',
             'email' => 'TestEmail',
@@ -149,7 +148,7 @@ class StockTest extends TestCase
             'address' => 'TestAddress'
         ]);
 
-        $this->call('POST','/stock/save',[
+        $this->call('POST', '/stock/save', [
             'stockid' => 'ST20212224ITM420455',
             'category' => 'Electronics',
             'description' => 'Nokia 3310',
@@ -161,7 +160,7 @@ class StockTest extends TestCase
             'stockuntil' => '2021-05-14'
         ]);
 
-        $this->call('POST','/stock/confirm/invoice',[
+        $this->call('POST', '/stock/confirm/invoice', [
             'stockid' => 'ST20212224ITM420455',
             'total' => '1500',
             'paid' => '1000',
@@ -169,7 +168,7 @@ class StockTest extends TestCase
             'paymethod' => 'Bkash'
         ]);
 
-        $response = $this->call('GET','/stock/viewinvoice/ST20212224ITM420455');
+        $response = $this->call('GET', '/stock/viewinvoice/ST20212224ITM420455');
 
         $response->assertOk();
     }
@@ -178,7 +177,7 @@ class StockTest extends TestCase
     {
         $this->userLogin();
 
-        $this->call('POST','/client/save',[
+        $this->call('POST', '/client/save', [
             'clientid' => '10',
             'clientname' => 'TestClient',
             'email' => 'TestEmail',
@@ -186,7 +185,7 @@ class StockTest extends TestCase
             'address' => 'TestAddress'
         ]);
 
-        $this->call('POST','/stock/save',[
+        $this->call('POST', '/stock/save', [
             'stockid' => 'ST20212224ITM420455',
             'category' => 'Electronics',
             'description' => 'Nokia 3310',
@@ -198,12 +197,61 @@ class StockTest extends TestCase
             'stockuntil' => '2021-05-14'
         ]);
 
-        $this->call('POST','/stock/confirm/invoice',[
+        $this->call('POST', '/stock/confirm/invoice', [
             'stockid' => 'ST20212224ITM420455',
             'total' => '1500',
             'paid' => '1000',
             'due' => '500',
             'paymethod' => 'Bkash'
         ]);
+
+        $response = $this->call('POST', '/stock/dischargestocks', [
+            'sid' => 'ST20212224ITM420455',
+            'discharge_date' => '2021-05-15'
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function testConfirmDischarge()
+    {
+        $this->userLogin();
+
+        $this->call('POST', '/client/save', [
+            'clientid' => '10',
+            'clientname' => 'TestClient',
+            'email' => 'TestEmail',
+            'contact' => '1280',
+            'address' => 'TestAddress'
+        ]);
+
+        $this->call('POST', '/stock/save', [
+            'stockid' => 'ST20212224ITM420455',
+            'category' => 'Electronics',
+            'description' => 'Nokia 3310',
+            'quantity' => '50',
+            'amount' => '30',
+            'unit' => 'kg',
+            'client' => '10',
+            'stockdate' => '2021-05-05',
+            'stockuntil' => '2021-05-14'
+        ]);
+
+        $response = $this->call('POST', '/stock/confirmdischarge', [
+            'sid' => 'ST20212224ITM420455',
+            'latefee' => '10',
+            'discharge_date' => '2021-05-15'
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function testViewDischargedStocks()
+    {
+        $this->userLogin();
+
+        $response = $this->call('GET', '/stock/dischargedstocks');
+
+        $response->assertOk();
     }
 }
